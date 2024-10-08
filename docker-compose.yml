@@ -1,1 +1,36 @@
-# Your Solution
+version: '3.8'
+ 
+services:
+  postgresql:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: sit722_part3_cz7n_user
+      POSTGRES_PASSWORD: Qk4hZIwiqIjsbmF0qErU0dDPKvU7foG4
+      POSTGRES_DB: sit722_part3_cz7n
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+ 
+  book_catalog:
+    build: ./book_catalog
+    container_name: book_catalog
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_URL: "postgresql://sit722_part3_cz7n_user:Qk4hZIwiqIjsbmF0qErU0dDPKvU7foG4@dpg-crueqijtq21c738hjcr0-a.oregon-postgres.render.com/sit722_part3_cz7n"
+    ports:
+      - "8000:8000"
+ 
+  inventory_management:
+    build: ./inventory_management
+    container_name: inventory_management
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_URL: "postgresql://sit722_part3_cz7n_user:Qk4hZIwiqIjsbmF0qErU0dDPKvU7foG4@dpg-crueqijtq21c738hjcr0-a.oregon-postgres.render.com/sit722_part3_cz7n"
+    ports:
+      - "8001:8001"
+ 
+volumes:
+  postgres_data:
